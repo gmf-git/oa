@@ -7,4 +7,5 @@ urlpatterns = [
 router = DefaultRouter()
 router.register('permission', views.PermissionViewSet, basename='permission')
 router.register('user', views.UserViewSet, basename='user')
+router.register('role', views.RoleViewSet, basename='role')
 urlpatterns += router.urls

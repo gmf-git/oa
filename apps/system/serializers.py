@@ -12,6 +12,7 @@ class PermissionSerializer(serializers.ModelSerializer):
 
 class RoleSerializer(serializers.ModelSerializer):
     """角色创建"""
+    insert_time = serializers.DateTimeField("%Y-%m-%d %H:%M:%S")
 
     class Meta:
         model = models.RoleModel
@@ -20,6 +21,7 @@ class RoleSerializer(serializers.ModelSerializer):
 
 class ListRoleSerializer(RoleSerializer):
     """角色查看"""
+
     permissions = PermissionSerializer(many=True)
 
 
@@ -34,4 +36,4 @@ class UserSerializer(serializers.ModelSerializer):
 
 class ListUserSerializer(UserSerializer):
     """用户查看"""
-    roles = ListRoleSerializer(many=True)
+    roles = RoleSerializer(many=True)

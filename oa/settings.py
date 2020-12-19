@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/2.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
-
+import datetime
 import os
 import sys
 
@@ -133,16 +133,33 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 # 用户model
 AUTH_USER_MODEL = 'system.UserModel'
-
+# 用户认证
+AUTHENTICATION_BACKENDS = ['utils.backend.AuthorBackend']
 # rest_framework配置
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     # 接口文档
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
-    # 'DEFAULT_PERMISSION_CLASSES': [
-    #     'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    # ],
+    # 用户认证
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication'
+    ],
+    # 权限认证
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+        # 'utils.permission.UrlPermission'
+    ],
+    # 分页
+    'DEFAULT_PAGINATION_CLASS': 'utils.pagination.PageNumber',
+    # 过滤
+    'DEFAULT_FILTER_BACKENDS': ['utils.filter.OrderingFilter'],
+}
+# jwt配置
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
+    'JWT_AUTH_COOKIE': 'jwt',
+    'JWT_RESPONSE_PAYLOAD_HANDLER': 'utils.jwt_response.jwt_response_payload_handler'
 }
 # 邮件系统
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
