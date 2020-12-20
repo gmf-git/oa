@@ -148,7 +148,7 @@ REST_FRAMEWORK = {
     # 权限认证
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
-        # 'utils.permission.UrlPermission'
+        'utils.permission.UrlPermission'
     ],
     # 分页
     'DEFAULT_PAGINATION_CLASS': 'utils.pagination.PageNumber',

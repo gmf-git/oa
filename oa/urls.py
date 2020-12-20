@@ -22,5 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('system/', include('system.urls')),
     path('login/', obtain_jwt_token),
-    path(r'docs/', include_docs_urls(title='接口文档'))
+    path(r'docs/', include_docs_urls(title='接口文档', permission_classes=[]))
 ]
