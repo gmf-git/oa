@@ -127,6 +127,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+MEDIA_URL = '/media/'
 # 跨域
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
@@ -148,7 +150,7 @@ REST_FRAMEWORK = {
     # 权限认证
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
-        'utils.permission.UrlPermission'
+        # 'utils.permission.UrlPermission'
     ],
     # 分页
     'DEFAULT_PAGINATION_CLASS': 'utils.pagination.PageNumber',

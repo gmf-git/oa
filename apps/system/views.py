@@ -8,7 +8,7 @@ from rest_framework_jwt.settings import api_settings
 from system import models
 from system import serializers
 from utils.jwt_response import jwt_response_payload_handler
-from utils.public import DefineViewSet
+from utils.public import DefineViewSet, get_keywords
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
@@ -47,3 +47,21 @@ class RoleViewSet(DefineViewSet):
     create_serializer = serializers.RoleSerializer
     list_serializer = serializers.ListRoleSerializer
     queryset = models.RoleModel.objects.all()
+
+
+class MenuViewSet(ModelViewSet):
+    """菜单"""
+    serializer_class = serializers.MenuSerializer
+    queryset = models.MenuModel.objects.all()
+    pagination_class = None
+
+    def get_queryset(self):
+        params = self.request.query_params
+        if params.get('drop'):
+            # 选择菜单
+            return self.queryset.filter(child__isnull=True)
+        fields_map = {
+            'level': 'level'
+        }
+        keywords = get_keywords(params, fields_map)
+        return self.queryset.filter(**keywords)

@@ -16,4 +16,13 @@ class DefineViewSet(ModelViewSet):
         instance = self.get_object()
         instance.is_delete = True
         instance.save()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response('删除成功', status=status.HTTP_204_NO_CONTENT)
+
+
+def get_keywords(params, fields_map):
+    data = {}
+    for k, v in fields_map.items():
+        middle = params.get(v)
+        if middle:
+            data.setdefault(k, middle)
+    return data
