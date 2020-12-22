@@ -26,6 +26,9 @@ class Permission(models.Model):
     params = models.CharField(max_length=255, verbose_name='参数', null=True, blank=True)
     is_delete = models.BooleanField(default=False)
 
+    def __str__(self):
+        return '%s %s' % (self.method, self.url)
+
     class Meta:
         db_table = 'system_permission'
         verbose_name = '权限表'
@@ -40,6 +43,9 @@ class RoleModel(models.Model):
     permissions = models.ManyToManyField('Permission', related_name='role', verbose_name='权限', blank=True)
     menus = models.ManyToManyField('MenuModel', related_name='role', verbose_name='菜单', blank=True)
 
+    def __str__(self):
+        return '%s:%s' % (self.key, self.name)
+
     class Meta:
         db_table = 'system_role'
         verbose_name = '角色表'
@@ -53,6 +59,9 @@ class MenuModel(models.Model):
     level = models.SmallIntegerField(verbose_name='菜单等级', null=True, blank=True)
     is_delete = models.BooleanField(default=False, verbose_name='逻辑删除')
     parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='child', null=True, blank=True)
+
+    def __str__(self):
+        return "%s %s" % (self.name, self.path)
 
     class Meta:
         db_table = 'system_menu'

@@ -24,7 +24,15 @@ class UserViewSet(DefineViewSet):
     """用户"""
     list_serializer = serializers.ListUserSerializer
     create_serializer = serializers.UserSerializer
-    queryset = models.UserModel.objects
+    queryset = models.UserModel.objects.all()
+
+    def get_queryset(self):
+        params = self.request.query_params
+        fields_map = {
+            'roles__id': 'role'
+        }
+        keywords = get_keywords(params, fields_map)
+        return self.queryset.filter(**keywords)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -34,7 +42,7 @@ class UserViewSet(DefineViewSet):
 
         payload = jwt_payload_handler(user)
         token = jwt_encode_handler(payload)
-        response_data = jwt_response_payload_handler(token, request.user, request)
+        response_data = jwt_response_payload_handler(token, user, request)
         response = Response(response_data, status=201, headers=headers)
         expiration = (datetime.utcnow() +
                       api_settings.JWT_EXPIRATION_DELTA)

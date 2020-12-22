@@ -1,6 +1,5 @@
 from system import models
 from rest_framework import serializers
-from rest_framework import validators
 
 
 class PermissionSerializer(serializers.ModelSerializer):
@@ -8,6 +7,14 @@ class PermissionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Permission
+        fields = '__all__'
+
+
+class MenuSerializer(serializers.ModelSerializer):
+    """菜单"""
+
+    class Meta:
+        model = models.MenuModel
         fields = '__all__'
 
 
@@ -23,7 +30,8 @@ class RoleSerializer(serializers.ModelSerializer):
 class ListRoleSerializer(RoleSerializer):
     """角色查看"""
 
-    permissions = PermissionSerializer(many=True)
+    permissions = PermissionSerializer(write_only=True)
+    menus = MenuSerializer(write_only=True)
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -37,12 +45,4 @@ class UserSerializer(serializers.ModelSerializer):
 
 class ListUserSerializer(UserSerializer):
     """用户查看"""
-    roles = RoleSerializer(many=True)
-
-
-class MenuSerializer(serializers.ModelSerializer):
-    """菜单"""
-
-    class Meta:
-        model = models.MenuModel
-        fields = '__all__'
+    roles = ListRoleSerializer(write_only=True)

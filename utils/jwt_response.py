@@ -21,8 +21,8 @@ def jwt_response_payload_handler(token, user=None, request=None):
             )
         return data
 
-    meuns = get_menus(first_menus)
+    menus = get_menus(first_menus)
     return {
         'token': token,
-        'meuns': meuns
+        'menus': menus
     }
